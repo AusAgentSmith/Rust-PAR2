@@ -11,7 +11,7 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, node-b]
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
