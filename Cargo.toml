@@ -4,11 +4,17 @@ version = "0.1.0"
 edition = "2024"
 description = "Pure Rust PAR2 verify and repair with SIMD-accelerated Galois field arithmetic"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/AusAgentSmith/Rust-PAR2"
+repository = "https://github.com/AusAgentSmith-org/Rust-PAR2"
 readme = "README.md"
 keywords = ["par2", "parity", "reed-solomon", "error-correction", "repair"]
 categories = ["algorithms", "filesystem"]
 rust-version = "1.85"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+
+[lints.rust]
+unused = "warn"
 
 [dependencies]
 md-5 = "0.10"
