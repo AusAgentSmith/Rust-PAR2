@@ -28,7 +28,7 @@ fn test_repair_from_verify_matches_repair() {
 
     // Method 2: verify then repair_from_verify
     let vr = rust_par2::verify(&fs2, tmp2.path());
-    let r2 = rust_par2::repair_from_verify(&fs2, tmp2.path(), &vr, true).unwrap();
+    let r2 = rust_par2::repair_from_verify(&fs2, tmp2.path(), &vr).unwrap();
 
     assert_eq!(r1.blocks_repaired, r2.blocks_repaired);
     assert_eq!(r1.files_repaired, r2.files_repaired);
@@ -83,7 +83,7 @@ fn test_verify_repair_verify_cycle() {
     assert!(pre.repair_possible);
 
     // Repair
-    let result = rust_par2::repair_from_verify(&file_set, tmp.path(), &pre, true).unwrap();
+    let result = rust_par2::repair_from_verify(&file_set, tmp.path(), &pre).unwrap();
     assert!(result.success);
 
     // Post-repair verify: all intact
