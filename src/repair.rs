@@ -78,7 +78,7 @@ pub enum RepairError {
 /// [`repair_from_verify`] instead to skip the redundant verification pass.
 pub fn repair(file_set: &Par2FileSet, dir: &Path) -> Result<RepairResult, RepairError> {
     let verify_result = verify::verify(file_set, dir);
-    repair_from_verify(file_set, dir, &verify_result, true)
+    repair_from_verify_inner(file_set, dir, &verify_result, true)
 }
 
 /// Repair using a pre-computed [`VerifyResult`].
@@ -93,14 +93,32 @@ pub fn repair(file_set: &Par2FileSet, dir: &Path) -> Result<RepairResult, Repair
 /// matrix inversion from O(N²D) to O(D³), which is the difference between
 /// minutes and milliseconds for typical repair scenarios.
 ///
-/// When `re_verify` is true, a full MD5 verification pass runs after repair
-/// to confirm all files are correct. When false, the repair result is trusted
-/// (the Reed-Solomon math is deterministic — if the matrix inverted and I/O
-/// succeeded, the output is correct). Skipping re-verify saves a full read
-/// of all files (~6s per 5GB).
+/// After repair, a full MD5 verification pass confirms all files are correct.
+/// To skip re-verification, use [`repair_from_verify_no_reverify`].
 ///
 /// This is a blocking operation. For async contexts, wrap in `spawn_blocking`.
 pub fn repair_from_verify(
+    file_set: &Par2FileSet,
+    dir: &Path,
+    verify_result: &VerifyResult,
+) -> Result<RepairResult, RepairError> {
+    repair_from_verify_inner(file_set, dir, verify_result, true)
+}
+
+/// Like [`repair_from_verify`], but skips re-verification after repair.
+///
+/// The Reed-Solomon math is deterministic — if the matrix inverted and I/O
+/// succeeded, the output is correct. Skipping re-verify saves a full read
+/// of all files (~6s per 5GB).
+pub fn repair_from_verify_no_reverify(
+    file_set: &Par2FileSet,
+    dir: &Path,
+    verify_result: &VerifyResult,
+) -> Result<RepairResult, RepairError> {
+    repair_from_verify_inner(file_set, dir, verify_result, false)
+}
+
+fn repair_from_verify_inner(
     file_set: &Par2FileSet,
     dir: &Path,
     verify_result: &VerifyResult,

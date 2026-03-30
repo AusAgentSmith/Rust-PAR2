@@ -390,7 +390,7 @@ dependencies = [
 
 [[package]]
 name = "rust-par2"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "crc32fast",
  "md-5",
