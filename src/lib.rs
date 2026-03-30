@@ -37,7 +37,9 @@ pub mod types;
 mod verify;
 
 pub use packets::{ParseError, parse_par2_file as parse, parse_par2_reader};
-pub use repair::{RepairError, RepairResult, repair, repair_from_verify, repair_from_verify_no_reverify};
+pub use repair::{
+    RepairError, RepairResult, repair, repair_from_verify, repair_from_verify_no_reverify,
+};
 pub use types::{
     DamagedFile, Md5Hash, MissingFile, Par2File, Par2FileSet, SliceChecksum, VerifiedFile,
     VerifyResult,
