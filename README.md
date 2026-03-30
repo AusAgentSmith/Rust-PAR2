@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/rust-par2.svg)](https://crates.io/crates/rust-par2)
 [![Docs.rs](https://docs.rs/rust-par2/badge.svg)](https://docs.rs/rust-par2)
-[![CI](https://github.com/AusAgentSmith/Rust-PAR2/actions/workflows/ci.yml/badge.svg)](https://github.com/AusAgentSmith/Rust-PAR2/actions/workflows/ci.yml)
+[![CI](https://github.com/AusAgentSmith-org/Rust-PAR2/actions/workflows/ci.yml/badge.svg)](https://github.com/AusAgentSmith-org/Rust-PAR2/actions/workflows/ci.yml)
 
 Pure Rust implementation of PAR2 (Parity Archive 2.0) verification and repair.
 
