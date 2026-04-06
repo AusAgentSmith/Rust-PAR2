@@ -17,7 +17,7 @@ jobs:
   test:
     runs-on: [self-hosted, node-b]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy

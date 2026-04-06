@@ -16,7 +16,7 @@ jobs:
   publish:
     runs-on: [self-hosted, node-b]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
       - name: Run tests
         run: cargo test --all-targets
