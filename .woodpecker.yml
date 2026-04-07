@@ -28,17 +28,12 @@ steps:
 
   - name: publish
     image: rust:1.88-bookworm
-    secrets: [git_auth_token]
+    environment:
+      GIT_AUTH_TOKEN:
+        from_secret: git_auth_token
     commands:
-      - mkdir -p $CARGO_HOME
-      - |
-        cat > $CARGO_HOME/config.toml << CONF
-        [registries.forgejo]
-        index = "sparse+https://repo.indexarr.net/api/packages/indexarr/cargo/"
-        [registry]
-        default = "forgejo"
-        CONF
-      - printf '[registries.forgejo]\ntoken = "Bearer %s"\n' "$${GIT_AUTH_TOKEN}" > $CARGO_HOME/credentials.toml
+      - printf '[registries.forgejo]\nindex = "sparse+https://repo.indexarr.net/api/packages/indexarr/cargo/"\ncredential-provider = "cargo:token"\n\n[registry]\ndefault = "forgejo"\n' > $CARGO_HOME/config.toml
+      - printf '[registries.forgejo]\ntoken = "Bearer %s"\n' "$GIT_AUTH_TOKEN" > $CARGO_HOME/credentials.toml
       - cargo publish --allow-dirty 2>&1 || echo "Publish skipped (version may already exist)"
     when:
       - event: push
