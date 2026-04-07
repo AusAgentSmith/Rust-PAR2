@@ -31,10 +31,16 @@ steps:
     secrets: [cargo_registry_token]
     commands:
       - mkdir -p $CARGO_HOME
+      - |
+        cat > $CARGO_HOME/config.toml << EOF
+        [registries.forgejo]
+        index = "sparse+https://repo.indexarr.net/api/packages/indexarr/cargo/"
+        credential-provider = "cargo:token"
+        [registry]
+        default = "forgejo"
+        EOF
       - printf '[registries.forgejo]\ntoken = "Bearer %s"\n' "$${CARGO_REGISTRY_TOKEN}" > $CARGO_HOME/credentials.toml
-      - cp .cargo/config.docker.toml $CARGO_HOME/config.toml
-      - cargo publish --registry forgejo --allow-dirty 2>&1 || echo "Publish skipped (version may already exist)"
+      - cargo publish --allow-dirty 2>&1 || echo "Publish skipped (version may already exist)"
     when:
       - event: push
         branch: main
-
