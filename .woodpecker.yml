@@ -1,0 +1,40 @@
+when:
+  - event: push
+    branch: main
+  - event: manual
+
+steps:
+  - name: fmt
+    image: rust:1.88-bookworm
+    commands:
+      - rustup component add rustfmt
+      - cargo fmt --all -- --check
+
+  - name: check
+    image: rust:1.88-bookworm
+    commands:
+      - cargo check --workspace
+
+  - name: test
+    image: rust:1.88-bookworm
+    commands:
+      - cargo test --workspace
+
+  - name: clippy
+    image: rust:1.88-bookworm
+    commands:
+      - rustup component add clippy
+      - cargo clippy --workspace -- -D warnings
+
+  - name: publish
+    image: rust:1.88-bookworm
+    secrets: [cargo_registry_token]
+    commands:
+      - mkdir -p $CARGO_HOME
+      - printf '[registries.forgejo]\ntoken = "Bearer %s"\n' "$${CARGO_REGISTRY_TOKEN}" > $CARGO_HOME/credentials.toml
+      - cp .cargo/config.docker.toml $CARGO_HOME/config.toml
+      - cargo publish --registry forgejo --allow-dirty 2>&1 || echo "Publish skipped (version may already exist)"
+    when:
+      - event: push
+        branch: main
+
