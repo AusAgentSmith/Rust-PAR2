@@ -68,7 +68,7 @@ steps:
     when:
       - event: push
         branch: main
-        status: success
+        status: [success]
 
   - name: discord-failure
     image: alpine/curl
@@ -81,4 +81,4 @@ steps:
           -H "Content-Type: application/json" \
           -d "{\"embeds\":[{\"title\":\"rust_par2 build failed\",\"description\":\"Check CI logs for details\",\"color\":15158332}]}"
     when:
-      - status: failure
+      - status: [failure]
