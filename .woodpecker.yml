@@ -38,3 +38,47 @@ steps:
     when:
       - event: push
         branch: main
+
+  - name: trigger-renovate
+    image: alpine/curl
+    environment:
+      WOODPECKER_TOKEN:
+        from_secret: woodpecker_token
+    commands:
+      - |
+        curl -sf -X POST \
+          "https://ci.indexarr.net/api/repos/indexarr/renovate/pipelines" \
+          -H "Authorization: Bearer $WOODPECKER_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d '{"branch":"main"}'
+    when:
+      - event: push
+        branch: main
+
+  - name: discord-success
+    image: alpine/curl
+    environment:
+      DISCORD_WEBHOOK_URL:
+        from_secret: discord_webhook_url
+    commands:
+      - |
+        curl -s -X POST "$DISCORD_WEBHOOK_URL" \
+          -H "Content-Type: application/json" \
+          -d "{\"embeds\":[{\"title\":\"rust_par2 published\",\"description\":\"Published to Forgejo registry. Renovate scan triggered.\",\"color\":3066993}]}"
+    when:
+      - event: push
+        branch: main
+        status: success
+
+  - name: discord-failure
+    image: alpine/curl
+    environment:
+      DISCORD_WEBHOOK_URL:
+        from_secret: discord_webhook_url
+    commands:
+      - |
+        curl -s -X POST "$DISCORD_WEBHOOK_URL" \
+          -H "Content-Type: application/json" \
+          -d "{\"embeds\":[{\"title\":\"rust_par2 build failed\",\"description\":\"Check CI logs for details\",\"color\":15158332}]}"
+    when:
+      - status: failure
