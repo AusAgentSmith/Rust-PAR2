@@ -2,6 +2,7 @@ when:
   - event: push
     branch: main
   - event: manual
+  - event: pull_request
 
 steps:
   - name: fmt
