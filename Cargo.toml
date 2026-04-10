@@ -17,15 +17,11 @@ all = { level = "warn", priority = -1 }
 unused = "warn"
 
 [dependencies]
-md-5 = "0.10"
+md-5 = "0.11"
 crc32fast = "1"
 thiserror = "2"
 tracing = "0.1"
 rayon = "1"
-
-# Use asm-accelerated MD5 on platforms that support GAS assembly (not MSVC)
-[target.'cfg(not(target_env = "msvc"))'.dependencies]
-md-5 = { version = "0.10", features = ["asm"] }
 
 [dev-dependencies]
 rand = "0.10"
