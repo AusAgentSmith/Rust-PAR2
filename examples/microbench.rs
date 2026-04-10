@@ -217,7 +217,7 @@ fn bench_loop<F: FnMut()>(min_duration: Duration, mut f: F) -> (u64, Duration) {
 }
 
 fn random_buf(size: usize) -> Vec<u8> {
-    use rand::RngCore;
+    use rand::Rng;
     let mut buf = vec![0u8; size];
     rand::rng().fill_bytes(&mut buf);
     buf
